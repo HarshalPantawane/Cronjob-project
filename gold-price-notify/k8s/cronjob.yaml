@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: gold-app
-            image: harshalpantawane/gold-app:latest
+            image: harshalpantawane/cronjob-img:latest
             imagePullPolicy: Always
             env:
             - name: GOLD_API_KEY
@@ -24,6 +24,5 @@ spec:
               value: "arn:aws:sns:us-east-1:890871562773:notify"
 
             - name: AWS_REGION
-              value: "us-east-1"
-                
+              value: "us-east-1"  
           restartPolicy: OnFailure
