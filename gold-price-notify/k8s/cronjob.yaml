@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Cronjob
+metadat:
+  name: gold-price-nofify
+spec:
+  schedule: "*/2 * * * *"       # every 2 minutes
+  jobTemplate:
+   spec:
+     template:
+       spec:
+         containers:
+         - name: gold-app
+           image: your-dockerhub-username/gold-app:latest
+           envFrom:
+           - secretRef:
+              name: gold-secret
+         restartPolicy: onFailure
+
