@@ -10,9 +10,20 @@ spec:
       template:
         spec:
           containers:
-            - name: gold-app
-              image: harshalpantawane/gold-app:latest
-              envFrom:
-                - secretRef:
-                    name: gold-secret
+          - name: gold-app
+            image: harshalpantawane/gold-app:latest
+            imagePullPolicy: Always
+            env:
+            - name: GOLD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gold-secret
+                  key: GOLD_API_KEY
+                  
+            - name: SNS_TOPIC_ARN
+              value: "arn:aws:sns:us-east-1:890871562773:notify"
+
+            - name: AWS_REGION
+              value: "us-east-1"
+                
           restartPolicy: OnFailure

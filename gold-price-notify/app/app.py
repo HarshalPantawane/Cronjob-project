@@ -1,45 +1,54 @@
 import requests
+import boto3
 import os
 from datetime import datetime
-from notifier import send_email
+from dotenv import load_dotenv
 
+load_dotenv()
+
+GOLD_API_URL = "https://www.goldapi.io/api/XAU/INR"
 API_KEY = os.getenv("GOLD_API_KEY")
-API_URL = "https://www.goldapi.io/api/XAU/INR"
+SNS_TOPIC_ARN = os.getenv("SNS_TOPIC_ARN") 
 
-def fetch_gold_price():
-    if not API_KEY:
-        print("Error: GOLD_API_KEY not set")
-        return None
+sns = boto3.client("sns", region_name="us-east-1")
+
+def get_gold_price():
+    headers = {
+        "x-access-token": API_KEY,
+        "Content-type": "application/json"
+    }
+    response = requests.get(GOLD_API_URL, headers=headers)
     
-    try:
-        headers = {
-            "x-access-token": API_KEY
-        }
-        
-        response = requests.get(API_URL, headers=headers)
-        
-        if response.status_code == 200:
-            return response.json().get("price")
-        else:
-            print(f"Failed to fetch price: {response.status_code}")
-            return None
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
-        return None
+    if response.status_code != 200:
+        raise Exception(f"API Error: {response.status_code} - {response.text}")
     
-def main(): 
+    data = response.json()
+    return data.get("price")
+
+def send_notification(price):
+    sns = boto3.client("sns", region_name="us-east-1")
+    
+    message = f"""
+    
+Gold Price Alert
+Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 
+Price (INR): {price}
+"""
+
+    sns.publish(
+        TopicArn=SNS_TOPIC_ARN,
+        Message=message,
+        Subject="Gold Price Update"
+    )   
+    
+def main():
     try:
-        price = fetch_gold_price()
-        
-        if price:
-            message = f"[{datetime.now()}] Gold Price (INR): {price}" 
-            print(message)
-            
-            send_email(message)
-        else:
-            print("No data received")
+        price = get_gold_price()
+        print("Gold Price:", price)
+        send_notification(price)
     except Exception as e:
-        print(f"Error in main: {e}")
-        
-if __name__ == "__main__":
-    main()               
+        print("Error:", str(e))
+
+if __name__=="__main__":
+    main()          
+            
