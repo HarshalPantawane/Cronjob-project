@@ -5,14 +5,13 @@ metadata:
 spec:
   schedule: "*/2 * * * *"       # every 2 minutes
   jobTemplate:
-   spec:
-     template:
-       spec:
-         containers:
-         - name: gold-app
-           image: harshalpantawane/gold-app:latest
-           envFrom:
-           - secretRef:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: gold-app
+            image: harshalpantawane/gold-app:latest
+            envFrom:
+            - secretRef:
               name: gold-secret
-         restartPolicy: onFailure
-
+          restartPolicy: OnFailure
