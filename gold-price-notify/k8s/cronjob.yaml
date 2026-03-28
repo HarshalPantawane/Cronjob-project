@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Cronjob
-metadat:
-  name: gold-price-nofify
+metadata:
+  name: gold-price-notify
 spec:
   schedule: "*/2 * * * *"       # every 2 minutes
   jobTemplate:
@@ -10,7 +10,7 @@ spec:
        spec:
          containers:
          - name: gold-app
-           image: your-dockerhub-username/gold-app:latest
+           image: harshalpantawane/gold-app:latest
            envFrom:
            - secretRef:
               name: gold-secret

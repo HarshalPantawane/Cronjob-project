@@ -2,7 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 import os
 
-def send_mail(message):
+def send_email(message):
     sender = os.getenv("EMAIL_SENDER")
     receiver = os.getenv("EMAIL_RECEIVER")
     password = os.getenv("EMAIL_PASSWORD")

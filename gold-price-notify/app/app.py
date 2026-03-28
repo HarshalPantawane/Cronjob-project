@@ -1,5 +1,3 @@
-
-
 import requests
 import os
 from datetime import datetime
@@ -15,7 +13,10 @@ def fetch_gold_price():
     }
     
     response = requests.get(API_URL, headers=headers)
-    
+    # except requests.RequestException as e:
+    #     print(f"Error fetching gold price: {e}")
+    #     return None
+
     if response.status_code == 200:
         return response.json().get("price")
     else:
