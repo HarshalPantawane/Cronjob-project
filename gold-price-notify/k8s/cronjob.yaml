@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: gold-price-notify
 spec:
-  schedule: "*/2 * * * *"       # every 2 minutes
+  schedule: "*/2 * * * *"
   jobTemplate:
     spec:
       template:
@@ -13,5 +13,5 @@ spec:
             image: harshalpantawane/gold-app:latest
             envFrom:
             - secretRef:
-              name: gold-secret
+                name: gold-secret
           restartPolicy: OnFailure
