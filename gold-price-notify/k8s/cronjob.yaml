@@ -1,18 +1,18 @@
+
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: gold-price-notify
 spec:
-  schedule: "*/2 * * * *"
+  schedule: "*/2 * * * *"   # every 2 minutes
   jobTemplate:
     spec:
       template:
-        metadata: {}
         spec:
           containers:
-          - name: gold-app
-            image: harshalpantawane/gold-app:latest
-            envFrom:
-            - secretRef:
-                name: gold-secret
+            - name: gold-app
+              image: harshalpantawane/gold-app:latest
+              envFrom:
+                - secretRef:
+                    name: gold-secret
           restartPolicy: OnFailure
