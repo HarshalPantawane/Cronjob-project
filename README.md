@@ -21,3 +21,7 @@ SNS delivers email to subscribers
 Gold API key stored securely using Kubernetes Secrets
 AWS credentials (Access Key & Secret Key) stored in Kubernetes Secrets and injected as environment variables
 No sensitive data is hardcoded or pushed to GitHub
+
+kubectl create secret generic my-secret \
+  --from-literal=username=admin \
+  --from-literal=password=12345
